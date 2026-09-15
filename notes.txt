@@ -1,0 +1,27 @@
+rules
+
+ - beat the dealer:
+ -> beat their hand, up to 21, or else it will be a bust.
+
+ - cards:
+ -> number on card = number
+ -> jacks, queens, kings, count as 10.
+
+ - aces:
+ -> aces count as 1 or 11.
+ -> ace prioritises being 11, but if it causes bust, ace = 1.
+
+ - on init cards:
+ -> if value of cards == 21, blackjack.
+
+
+start:
+
+ - players place bet.
+ - players dealt cards.
+ - player options: hit, stand, double down, split, fold.
+ - only hit and stand available as option after the second dealing of cards. 
+ -> hit: take another card
+ -> stand: dont take any more cards.
+ -> double down: double the bet and take one card.
+ -> split:
