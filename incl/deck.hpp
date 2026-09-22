@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils.hpp"
+#include "common_vars.hpp"
 
 #include <string>
 #include <array>
@@ -11,35 +12,10 @@
 #include <vector>
 #include <utility>
 
-constexpr std::array<std::string_view, 4> SUITS{
-    "Clubs",
-    "Diamonds",
-    "Hearts",
-    "Spades"
-};
-
-// type char is fine since not using large numbers
-enum class CardType : char {
-    Regular = 0,
-    King = 11,
-    Queen = 12,
-    Jack = 13,
-    Ace = 14
-};
-
-struct Card {
-    CardType type;
-    int suit_index;
-    int number;
-};
-
-constexpr int CARDS_PER_SUIT = 13;
-constexpr int FACE_CARDS = 3;
-
 // Singleton deck
 class Deck{
 private:
-    Deck() = default;
+    Deck();
 
     std::vector<Card> total_cards{};
     std::vector<Card> drawn_cards{};

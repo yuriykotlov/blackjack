@@ -11,7 +11,7 @@ Deck::Deck(){
         for (int i = 2; i <= CARDS_PER_SUIT; ++i){
             total_cards.push_back(Card{
                 // will cast to face cards type once above 10, as 13 - 3 = 10
-                i <= CARDS_PER_SUIT - FACE_CARDS ? CardType::Regular : static_cast<CardType>(i),
+                i <= CARDS_PER_SUIT - FACE_CARDS ? CardType::REGULAR : static_cast<CardType>(i),
                 current_suit_index,
                 i});
         }
@@ -21,10 +21,10 @@ Deck::Deck(){
 
 const std::string_view Deck::card_type_to_string(const CardType type) const {
     switch(type){
-        case CardType::Jack: return "Jack";
-        case CardType::Queen: return "Queen";
-        case CardType::King: return "King";
-        case CardType::Ace: return "Ace";
+        case CardType::JACK: return "Jack";
+        case CardType::QUEEN: return "Queen";
+        case CardType::KING: return "King";
+        case CardType::ACE: return "Ace";
         default: return "???";
     }
 }
@@ -54,7 +54,7 @@ void Deck::display_deck() const{
     }
 
     for (auto &card : total_cards){
-        if (card.type == CardType::Regular){
+        if (card.type == CardType::REGULAR){
             std::cout << card.number << " of " << SUITS[card.suit_index] << '\n';
         }
         else{

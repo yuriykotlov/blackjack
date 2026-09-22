@@ -1,7 +1,5 @@
 #pragma once
 
-void start();
+class Dealer{
 
-void deal();
-
-void speak();
+};
