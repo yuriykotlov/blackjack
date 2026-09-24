@@ -1,13 +1,23 @@
+#pragma once
+
 #include <string_view>
 #include <array>
 
 // GAME VARIABLES:
 
 constexpr int MAX_PLAYERS{ 4 };
-constexpr int MAX_PLAYER_NAME_LEN{ 10 };
+constexpr int MAX_PLAYER_NAME_LEN{ 12 };
 
 constexpr int MAX_TURN_TIME_SEC{ 20 };
 constexpr int X_CARDS_DEALT_PER_TURN{ 2 };
+
+enum class Options : char {
+    STAND = 1,
+    HIT = 2,
+    FOLD = 3,
+    DOUBLE_DOWN = 4,
+    INSURANCE = 5
+};
 
 // DECK AND CARD RELATED VARIABLES:
 

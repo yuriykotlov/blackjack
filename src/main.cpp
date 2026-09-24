@@ -1,13 +1,12 @@
 #include "deck.hpp"
+#include "dealer.hpp"
 
 #include <iostream>
 
+void start_game(){
+    
+}
+
 int main(){
-    Deck &deck = Deck::get_deck();
-    deck.display_deck();
-
-    std::cout << '\n' << "###\n\n";
-
-    deck.shuffle();
-    deck.display_deck();
+    
 }

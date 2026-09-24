@@ -1,4 +1,5 @@
 #include "deck.hpp"
+#include "utils.hpp"
 
 // build deck
 Deck::Deck(){

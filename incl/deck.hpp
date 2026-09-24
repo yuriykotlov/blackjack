@@ -1,6 +1,5 @@
 #pragma once
 
-#include "utils.hpp"
 #include "common_vars.hpp"
 
 #include <string>
@@ -15,12 +14,12 @@
 // Singleton deck
 class Deck{
 private:
-    Deck();
-
     std::vector<Card> total_cards{};
     std::vector<Card> drawn_cards{};
 
 public:
+    Deck();
+    
     Deck(const Deck&) = delete; // dont allow duplication
     Deck& operator=(const Deck&) = delete; // dont allow reassignment
 
