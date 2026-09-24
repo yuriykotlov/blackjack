@@ -11,6 +11,8 @@ constexpr int MAX_PLAYER_NAME_LEN{ 12 };
 constexpr int MAX_TURN_TIME_SEC{ 20 };
 constexpr int X_CARDS_DEALT_PER_TURN{ 2 };
 
+constexpr int MAX_CARD_SCORE_TO_LOSE{ 21 };
+
 enum class Options : char {
     STAND = 1,
     HIT = 2,

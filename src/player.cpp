@@ -71,7 +71,7 @@ Options Player::play_option(std::vector<Card> &dealer_hand){
     return static_cast<Options>(option);
 }
 
-int Player::bet(){
+int Player::place_bet(){
     std::cout << std::format(
         "Your current cash balance is: {0}.\nEnter an amount to bet (0-{0})",
         total_cash 

@@ -30,7 +30,7 @@ const std::string_view Deck::card_type_to_string(const CardType type) const {
     }
 }
 
-const Card* const Deck::draw(){
+const Card* Deck::draw(){
     if (total_cards.empty()){
         std::cout << "There are no cards in the deck.\n";
         return nullptr;

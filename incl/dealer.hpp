@@ -8,7 +8,7 @@
 
 class Dealer{
 private:
-    Deck *pDeck{ nullptr };
+    Deck* const pDeck;
 
     std::vector<Player> players{};
     std::vector<Card> hand{};
@@ -24,12 +24,21 @@ public:
         return dealer;
     }
 
-    void deal_cards(std::vector<Player> &players);
-    void recieve_bet(int bet, Player &player_betting);
+    void deal_cards();
+    
+    inline void payout_to(Player &player){
+        player.set_total_cash(player.get_current_bet() * 2);
+        player.set_current_bet(0);
+    }
 
-    void evaluate_all_hands();
+    inline void take_player_bet(Player &player){
+        player.set_current_bet(0);
+    }
+
+    // type bool to detect if player has busted (hand value > 21)
     bool evaluate_player_hand(Player &player);
-    void payout_to(Player &player);
+    void evaluate_all_hands();
 
     void add_players(std::vector<Player> &players);
+    void get_bets();
 };

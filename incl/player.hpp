@@ -9,7 +9,7 @@
 
 class Player{
 private:
-    std::vector<Card> cards{};
+    std::vector<const Card*> hand{};
 
     char m_name[MAX_PLAYER_NAME_LEN + 1]{};
     int id{ -1 };
@@ -30,9 +30,33 @@ public:
 
         m_name[MAX_PLAYER_NAME_LEN] = '\0';
     };
-    Player onboard(const std::vector<const std::string*> &current_players);
 
-    int bet();
+    Player onboard(const std::vector<const std::string*> &current_players);
+    int place_bet();
+
+    int get_current_bet(){
+        return current_bet;
+    }
+
+    int set_current_bet(int new_bet){
+        current_bet = new_bet;
+    }
+
+    int get_total_cash(){
+        return total_cash;
+    }
+
+    int set_total_cash(int new_cash){
+        total_cash = new_cash;
+    }
+
+    void give_card(const Card *card){
+        hand.push_back(card);
+    }
+
+    std::vector<const Card*> get_hand(){
+        return hand;
+    }
 
     // dealer_hand is used to see if the dealer has an ace for the insurance option.
     Options play_option(std::vector<Card> &dealer_hand);
