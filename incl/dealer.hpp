@@ -5,13 +5,14 @@
 #include "player.hpp"
 
 #include <vector>
+#include <memory>
 
 class Dealer{
 private:
     Deck* const pDeck;
 
-    std::vector<Player> players{};
-    std::vector<Card> hand{};
+    Player *player;
+    std::vector<const Card*> hand{};
 
 public:
     Dealer() : pDeck(&Deck::get_deck()){};
@@ -23,22 +24,23 @@ public:
         static Dealer dealer{};
         return dealer;
     }
-
-    void deal_cards();
     
-    inline void payout_to(Player &player){
-        player.set_total_cash(player.get_current_bet() * 2);
-        player.set_current_bet(0);
+    inline void payout_to_player(){
+        player->set_total_cash(player->get_current_bet() * 2);
+        player->set_current_bet(0);
     }
 
-    inline void take_player_bet(Player &player){
-        player.set_current_bet(0);
+    inline void take_player_bet(){
+        player->set_current_bet(0);
     }
 
-    // type bool to detect if player has busted (hand value > 21)
-    bool evaluate_player_hand(Player &player);
-    void evaluate_all_hands();
+    inline void add_player(Player *new_player){
+        player = new_player;
+    }
 
-    void add_players(std::vector<Player> &players);
-    void get_bets();
+    void give_new_hand(unsigned int x_cards = 1);
+    void deal_to_hand(std::vector<const Card*> &hand, unsigned int x_cards);
+
+    // detect if player has busted (hand value > 21)
+    void evaluate_player_hand();
 };

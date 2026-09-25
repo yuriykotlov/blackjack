@@ -5,7 +5,7 @@
 
 // GAME VARIABLES:
 
-constexpr int MAX_PLAYERS{ 4 };
+constexpr int MAX_PLAYERS{ 1 };
 constexpr int MAX_PLAYER_NAME_LEN{ 12 };
 
 constexpr int MAX_TURN_TIME_SEC{ 20 };

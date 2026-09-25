@@ -1,35 +1,36 @@
 #include "dealer.hpp"
 
 #include <iostream>
+#include <vector>
 
-void Dealer::deal_cards(){
-    if(players.empty()){
-        std::cerr << "No players to deal cards to.\n";
-        return;
-    }
-
-    if(pDeck->get_total_cards().empty()){
-        std::cerr << "No players to deal cards to.\n";
-        return;
-    }
-
-    int total_cards_size = pDeck->get_total_cards().size();
-
-    for(Player &player : players){
-        if(total_cards_size <= 0){
-            std::cerr << "No more cards to deal to players.\n";
-            return;
+void Dealer::deal_to_hand(std::vector<const Card*> &hand, unsigned int x_cards){
+    for(size_t i = x_cards; i != 0; --i){
+        if(pDeck->get_total_cards().empty()){
+            std::cerr << "No cards to deal to player.\n";
+            break;
         }
-
-        player.give_card(pDeck->draw());
+        
+        hand.push_back(pDeck->draw());
     }
 }
 
-bool Dealer::evaluate_player_hand(Player &player){
-    std::vector<const Card*> player_hand = player.get_hand();
+void Dealer::give_new_hand(unsigned int x_cards = 1){
+    deal_to_hand(hand, x_cards); // dealer hand
+
+    if(!player){
+        std::cerr << "No player to deal cards to.\n";
+        return;
+    }
+
+    deal_to_hand(player->get_hand(), x_cards);
+}
+
+void Dealer::evaluate_player_hand(){
+    std::vector<const Card*> player_hand = player->get_hand();
 
     if(player_hand.empty()){
-        return false;
+        std::cerr << "Player has no cards in hand.\n";
+        return;
     }
 
     int amount{ 0 };
@@ -39,15 +40,9 @@ bool Dealer::evaluate_player_hand(Player &player){
         amount += card->number;
     }
 
-    return amount > MAX_CARD_SCORE_TO_LOSE;
-}
-
-void Dealer::evaluate_all_hands(){
-    for(Player &player : players){
-        if(evaluate_player_hand(player)){
-            payout_to(player);
-        } else{
-            take_player_bet(player);
-        }
+    if(amount > MAX_CARD_SCORE_TO_LOSE){
+        take_player_bet();
+    } else{
+        payout_to_player();
     }
 }

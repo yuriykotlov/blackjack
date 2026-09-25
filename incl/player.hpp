@@ -34,27 +34,27 @@ public:
     Player onboard(const std::vector<const std::string*> &current_players);
     int place_bet();
 
-    int get_current_bet(){
+    inline int get_current_bet(){
         return current_bet;
     }
 
-    int set_current_bet(int new_bet){
+    inline int set_current_bet(int new_bet){
         current_bet = new_bet;
     }
 
-    int get_total_cash(){
+    inline int get_total_cash(){
         return total_cash;
     }
 
-    int set_total_cash(int new_cash){
+    inline int set_total_cash(int new_cash){
         total_cash = new_cash;
     }
 
-    void give_card(const Card *card){
+    inline void give_card(const Card *card){
         hand.push_back(card);
     }
 
-    std::vector<const Card*> get_hand(){
+    inline std::vector<const Card*> &get_hand(){
         return hand;
     }
 
