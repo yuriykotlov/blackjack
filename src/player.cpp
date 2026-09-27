@@ -5,30 +5,15 @@
 #include <format>
 #include <string>
 
-Player Player::onboard(const std::vector<const std::string*> &current_players){
-    std::string intro_text{ "Players in game: " };
-
-    if(!current_players.empty()){
-        for(const auto *name : current_players){
-            if(!name) continue;
-
-            std::format_to(std::back_inserter(intro_text), "{}, ", *name);
-        }
-
-        //pop back twice for last name as it will have ", "
-
-        intro_text.pop_back();
-        intro_text.pop_back();
-    } else{
-        intro_text.append("None");
-    }
-
-    std::cout << intro_text << '\n';
+std::string Player::onboard() const{
     std::string name{};
 
     while(true){
-        std::cout << "Enter your name (1-" << MAX_PLAYER_NAME_LEN << " chars):\n-> ";
+        std::cout << "\nEnter your name (1-" << MAX_PLAYER_NAME_LEN << " chars):\n-> ";
+
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::getline(std::cin, name);
+
         std::cout << '\n';
 
         if(name.empty() || name.length() > MAX_PLAYER_NAME_LEN){
@@ -36,17 +21,10 @@ Player Player::onboard(const std::vector<const std::string*> &current_players){
         } else { break; }
     }
     
-    return Player{name};
+    return name;
 }
 
-Options Player::play_option(std::vector<Card> &dealer_hand){
-    bool has_ace = [&](){
-        for(const Card &card : dealer_hand){
-            if(card.type == CardType::ACE) return true;
-        }
-        return false;
-    }();
-    
+Options Player::play_option(const bool can_play_insurance){
     std::cout << std::format(R"(
         Choose an option to play:
 
@@ -55,7 +33,7 @@ Options Player::play_option(std::vector<Card> &dealer_hand){
             [3] : FOLD
             [4] : DOUBLE DOWN
             {}
-    )", has_ace ? "[5]: INSURANCE" : "") << "\n -> ";
+    )", can_play_insurance ? "[5]: INSURANCE" : "") << "\n -> ";
     
     // valid ascii values for nums 1-5 are 49->53
     char option{};

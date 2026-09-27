@@ -1,41 +1,36 @@
 #include "deck.hpp"
+
 #include "utils.hpp"
+
+#include <iostream>
 
 // build deck
 Deck::Deck(){
+    std::cout << "BUILDING DECK\n";
+
     total_cards.reserve(CARDS_PER_SUIT * SUITS.size());
     drawn_cards.reserve(CARDS_PER_SUIT * SUITS.size());
 
-    int current_suit_index = 0;
+    char current_suit_index = 0;
 
     for (auto const &suit : SUITS){
         for (int i = 2; i <= CARDS_PER_SUIT; ++i){
-            total_cards.push_back(Card{
+            Card new_card{
                 // will cast to face cards type once above 10, as 13 - 3 = 10
                 i <= CARDS_PER_SUIT - FACE_CARDS ? CardType::REGULAR : static_cast<CardType>(i),
                 current_suit_index,
-                i});
+                static_cast<char>(i)
+            };
+
+            total_cards.push_back(new_card);
         }
         current_suit_index += 1;
     }
-}
-
-const std::string_view Deck::card_type_to_string(const CardType type) const {
-    switch(type){
-        case CardType::JACK: return "Jack";
-        case CardType::QUEEN: return "Queen";
-        case CardType::KING: return "King";
-        case CardType::ACE: return "Ace";
-        default: return "???";
-    }
+    
+    std::cout << total_cards.size();
 }
 
 const Card* Deck::draw(){
-    if (total_cards.empty()){
-        std::cout << "There are no cards in the deck.\n";
-        return nullptr;
-    }
-
     int random = get_random_int(1, total_cards.size());
 
     drawn_cards.emplace_back(total_cards[random]);
@@ -46,22 +41,6 @@ const Card* Deck::draw(){
     total_cards.pop_back();
 
     return &drawn_cards.back();
-}
-
-void Deck::display_deck() const{
-    if (total_cards.empty()){
-        std::cout << "There are no cards in the deck.\n";
-        return;
-    }
-
-    for (auto &card : total_cards){
-        if (card.type == CardType::REGULAR){
-            std::cout << card.number << " of " << SUITS[card.suit_index] << '\n';
-        }
-        else{
-            std::cout << card_type_to_string(card.type) << " of " << SUITS[card.suit_index] << '\n';
-        }
-    }
 }
 
 void Deck::return_drawn_cards(){
@@ -75,6 +54,8 @@ void Deck::return_drawn_cards(){
 }
 
 void Deck::shuffle(){
+    std::cout << total_cards.size();
+
     if (total_cards.empty()){
         std::cout << "There are no cards to shuffle in the deck.\n";
         return;

@@ -28,17 +28,11 @@ public:
         return deck;
     }
     
-    const std::string_view card_type_to_string(const CardType type) const;
+    inline const std::vector<Card> &get_total_cards() const { return total_cards; }
+    inline const std::vector<Card> &get_drawn_cards() const { return drawn_cards; }
+    
     const Card* draw();
 
-    std::vector<Card> get_total_cards(){
-        return total_cards;
-    }
-    std::vector<Card> get_drawn_cards(){
-        return drawn_cards;
-    }
-
     void shuffle();
-    void display_deck() const;
     void return_drawn_cards(); // return drawn cards to the end of the total_cards
 };

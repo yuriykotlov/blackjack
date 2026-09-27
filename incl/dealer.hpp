@@ -5,17 +5,18 @@
 #include "player.hpp"
 
 #include <vector>
-#include <memory>
 
 class Dealer{
 private:
     Deck* const pDeck;
 
     Player *player;
-    std::vector<const Card*> hand{};
+    std::vector<const Card*> dealer_hand{};
 
 public:
-    Dealer() : pDeck(&Deck::get_deck()){};
+    Dealer() : pDeck(&Deck::get_deck()){
+        std::cout << "hi, " << pDeck->get_total_cards().size();
+    };
 
     Dealer(const Dealer&) = delete; // dont allow duplication
     Dealer& operator=(const Dealer&) = delete; // dont allow reassignment
@@ -24,6 +25,8 @@ public:
         static Dealer dealer{};
         return dealer;
     }
+
+    inline std::vector<const Card*> &get_hand(){ return dealer_hand; }
     
     inline void payout_to_player(){
         player->set_total_cash(player->get_current_bet() * 2);
@@ -38,9 +41,11 @@ public:
         player = new_player;
     }
 
-    void give_new_hand(unsigned int x_cards = 1);
     void deal_to_hand(std::vector<const Card*> &hand, unsigned int x_cards);
 
     // detect if player has busted (hand value > 21)
     void evaluate_player_hand();
+
+    void reset_game();
+    void start_game();
 };

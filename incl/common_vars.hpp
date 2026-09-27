@@ -7,11 +7,13 @@
 
 constexpr int MAX_PLAYERS{ 1 };
 constexpr int MAX_PLAYER_NAME_LEN{ 12 };
+constexpr int PLAYER_STARTING_CASH{ 500 };
 
 constexpr int MAX_TURN_TIME_SEC{ 20 };
-constexpr int X_CARDS_DEALT_PER_TURN{ 2 };
-
 constexpr int MAX_CARD_SCORE_TO_LOSE{ 21 };
+
+constexpr int X_CARDS_DEALT_PER_TURN{ 2 };
+constexpr int STARTING_HAND_CARD_AMOUNT{ 2 };
 
 enum class Options : char {
     STAND = 1,
@@ -41,8 +43,8 @@ enum class CardType : char {
 
 struct Card {
     CardType type{};
-    int suit_index{};
-    int number{};
+    char suit_index{};
+    char number{};
 };
 
 constexpr int CARDS_PER_SUIT{ 13 };
