@@ -45,31 +45,35 @@ std::string format_hand(std::vector<const Card*> &hand){
 }
 
 std::string game_round(Player &player, std::vector<const Card*> &dealer_hand){
-    std::string dealer_hand_formatted{};
+    std::cout << "\033[2J\033[1;1H";
+
+    std::string dealer_hand_formatted = format_hand(dealer_hand);
 
     if(dealer_hand.empty()){
         std::cerr << "Dealer hand is empty?\n";
         return{};
-    } else {
-        dealer_hand_formatted = format_hand(dealer_hand);
-
-        // if starting the game, hide the dealer's second dealt card
-        if(dealer_hand.size() == STARTING_HAND_CARD_AMOUNT){
-            int last_index = dealer_hand_formatted.size() - 1;
-            dealer_hand_formatted[last_index] = '#';
-            dealer_hand_formatted[last_index - 1] = '#'; 
+        
+    } else if(dealer_hand.size() == STARTING_HAND_CARD_AMOUNT){
+        for(int i = dealer_hand_formatted.length() - 1; i > 0; --i){
+            if(dealer_hand_formatted[i] == ' '){
+                dealer_hand_formatted.erase(i + 1);
+                dealer_hand_formatted += "[?]";
+                break;
+            }
         }
     }
 
     return std::format(R"(
-        [    CASH: ${0}        BET PLACED: ${1}    ]
+        Player: {0}
+        [    CASH: ${1}        BET PLACED: ${2}    ]
 
         Dealer Hand:
-        {2}
+        {3}
 
         Your Hand:
-        {3}
+        {4}
     )",
+        player.get_name(),
         player.get_total_cash(),
         player.get_current_bet(),
         dealer_hand_formatted,
@@ -77,8 +81,18 @@ std::string game_round(Player &player, std::vector<const Card*> &dealer_hand){
     );
 }
 
-std::string end_game(Player &player, std::vector<const Card*> &dealer_hand){
-    
+std::string end_round(bool player_won, int player_bet_placed){
+    return std::format(R"(
+                   You {0}!
+
+               Cash {0}: ${1}
+
+
+        [s] Keep playing    [q] Quit
+        )",
+        player_won ? "won" : "lost",
+        player_bet_placed
+    );
 }
 
 } // namespace Display

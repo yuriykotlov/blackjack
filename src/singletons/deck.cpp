@@ -1,8 +1,14 @@
 #include "deck.hpp"
 
-#include "utils.hpp"
-
 #include <iostream>
+
+#include <random>
+
+static inline std::mt19937 gen( std::random_device{}() );
+
+static inline int get_random_int(int min, int max){
+    return std::uniform_int_distribution<int>(min, max)(gen);
+}
 
 // build deck
 Deck::Deck(){
@@ -31,7 +37,7 @@ Deck::Deck(){
 }
 
 const Card* Deck::draw(){
-    int random = get_random_int(1, total_cards.size());
+    int random = get_random_int(0, total_cards.size() - 1);
 
     drawn_cards.emplace_back(total_cards[random]);
 
@@ -50,7 +56,7 @@ void Deck::return_drawn_cards(){
     }
 
     total_cards.insert(total_cards.end(), drawn_cards.cbegin(), drawn_cards.cend());
-    total_cards.clear();
+    drawn_cards.clear();
 }
 
 void Deck::shuffle(){
@@ -61,9 +67,9 @@ void Deck::shuffle(){
         return;
     }
 
-    int total_cards_size = total_cards.size();
+    int total_cards_size = total_cards.size() - 1;
 
-    for (int i = 0; i < total_cards.size(); ++i){
+    for (int i = 0; i < total_cards_size; ++i){
         int random1 = get_random_int(0, total_cards_size);
         int random2 = get_random_int(0, total_cards_size);
 

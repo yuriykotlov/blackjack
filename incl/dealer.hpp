@@ -13,6 +13,8 @@ private:
     Player *player;
     std::vector<const Card*> dealer_hand{};
 
+    bool ending_round = false;
+
 public:
     Dealer() : pDeck(&Deck::get_deck()){
         std::cout << "hi, " << pDeck->get_total_cards().size();
@@ -27,6 +29,7 @@ public:
     }
 
     inline std::vector<const Card*> &get_hand(){ return dealer_hand; }
+    inline bool is_round_ending(){ return ending_round; }
     
     inline void payout_to_player(){
         player->set_total_cash(player->get_current_bet() * 2);
@@ -43,8 +46,8 @@ public:
 
     void deal_to_hand(std::vector<const Card*> &hand, unsigned int x_cards);
 
-    // detect if player has busted (hand value > 21)
-    void evaluate_player_hand();
+    int check_hand_score(std::vector<const Card*> hand);
+    void finish_round();
 
     void reset_game();
     void start_game();

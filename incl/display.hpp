@@ -5,5 +5,5 @@
 
 namespace Display{
     std::string game_round(Player &player, std::vector<const Card*> &dealer_hand);
-    std::string end_game(Player &player, std::vector<const Card*> &dealer_hand);
+    std::string end_round(bool player_won, int player_bet_placed);
 }
