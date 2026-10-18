@@ -4,9 +4,9 @@
 
 #include <random>
 
-static inline std::mt19937 gen( std::random_device{}() );
+static std::mt19937 gen( std::random_device{}() );
 
-static inline int get_random_int(int min, int max){
+static int get_random_int(int min, int max){
     return std::uniform_int_distribution<int>(min, max)(gen);
 }
 

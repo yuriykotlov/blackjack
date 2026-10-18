@@ -32,9 +32,7 @@ int Dealer::check_hand_score(std::vector<const Card*> hand){
     return amount;
 }
 
-void Dealer::finish_round(){
-    ending_round = true;
-
+void Dealer::evaluate_hands(){
     int player_score = check_hand_score(player->get_hand());
     int dealer_score = check_hand_score(dealer_hand);
 
@@ -43,14 +41,11 @@ void Dealer::finish_round(){
     } else{
         payout_to_player();
     }
+
+    set_finishing_round(true);
 }
 
-void Dealer::reset_game(){
-    // clear terminal
-    std::cout << "\033[2J\033[1;1H";
-    
-    ending_round = false;
-    
+void Dealer::reset_variables(){
     pDeck->return_drawn_cards();
     pDeck->shuffle();
 
@@ -59,11 +54,11 @@ void Dealer::reset_game(){
     player->set_total_cash(PLAYER_STARTING_CASH);
 
     dealer_hand.clear(); // dealer hand
+
+    set_finishing_round(false);
 }
 
-void Dealer::start_game(){
-    reset_game();
-
+void Dealer::start_dealing(){
     deal_to_hand(player->get_hand(), STARTING_HAND_CARD_AMOUNT);
     deal_to_hand(dealer_hand, STARTING_HAND_CARD_AMOUNT);
 

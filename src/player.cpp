@@ -5,7 +5,7 @@
 #include <format>
 #include <string>
 
-std::string Player::onboard() const{
+const std::string Player::onboard() const{
     std::string name{};
 
     while(true){
@@ -24,7 +24,7 @@ std::string Player::onboard() const{
     return name;
 }
 
-Options Player::play_option(const bool double_down, const bool insurance){
+const Options Player::play_option(const bool double_down, const bool insurance){
     std::cout << std::format(R"(
         Choose an option to play:
 

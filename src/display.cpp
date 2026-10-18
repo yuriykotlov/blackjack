@@ -30,7 +30,7 @@ std::string card_to_string(const Card &card){
     return card_string;
 }
 
-std::string format_hand(std::vector<const Card*> &hand){
+std::string format_hand(const std::vector<const Card*> &hand){
     std::string hand_string{};
 
     for(const Card* card : hand){
@@ -44,9 +44,7 @@ std::string format_hand(std::vector<const Card*> &hand){
     return hand_string;
 }
 
-std::string game_round(Player &player, std::vector<const Card*> &dealer_hand){
-    std::cout << "\033[2J\033[1;1H";
-
+std::string game_round(Player &player, const std::vector<const Card*> &dealer_hand){
     std::string dealer_hand_formatted = format_hand(dealer_hand);
 
     if(dealer_hand.empty()){
@@ -81,7 +79,7 @@ std::string game_round(Player &player, std::vector<const Card*> &dealer_hand){
     );
 }
 
-std::string end_round(bool player_won, int player_bet_placed){
+std::string end_round(const bool player_won, const int player_bet_placed){
     return std::format(R"(
                    You {0}!
 

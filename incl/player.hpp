@@ -29,28 +29,28 @@ public:
         m_name[MAX_PLAYER_NAME_LEN] = '\0';
     };
     
-    inline std::string get_name() const { return m_name; }
-    inline std::vector<const Card*> &get_hand(){ return hand; }
+    const std::string get_name() const { return m_name; }
+    std::vector<const Card*> &get_hand(){ return hand; }
 
-    inline int get_current_bet() const { return current_bet; }
-    inline int get_total_cash() const { return total_cash; }
-    inline int get_last_bet_placed() const { return last_bet_placed; }
+    const int get_current_bet() const { return current_bet; }
+    const int get_total_cash() const { return total_cash; }
+    const int get_last_bet_placed() const { return last_bet_placed; }
 
-    inline void set_current_bet(int new_bet){
+    void set_current_bet(int new_bet){
         current_bet = new_bet;
         // if its equal to 0 then its being reset, and we don't want that
         if(current_bet != 0) last_bet_placed = current_bet;
     }
 
-    inline void set_total_cash(int new_cash){
+    void set_total_cash(int new_cash){
         total_cash = new_cash;
     }
 
-    inline void give_card(const Card *card){
+    void give_card(const Card *card){
         hand.push_back(card);
     }
 
-    std::string onboard() const;
+    const std::string onboard() const;
     void place_bet();
-    Options play_option(const bool double_down, const bool insurance);
+    const Options play_option(const bool double_down, const bool insurance);
 };

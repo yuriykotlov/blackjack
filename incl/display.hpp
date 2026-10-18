@@ -4,6 +4,6 @@
 #include <string>
 
 namespace Display{
-    std::string game_round(Player &player, std::vector<const Card*> &dealer_hand);
-    std::string end_round(bool player_won, int player_bet_placed);
+    std::string game_round(Player &player, const std::vector<const Card*> &dealer_hand);
+    std::string end_round(const bool player_won, const int player_bet_placed);
 }
