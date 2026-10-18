@@ -21,6 +21,9 @@ public:
     }
 
     static const std::pair<Player, Dealer&> init_game();
+    
+    Player &get_player(){ return player; }
+    Dealer &get_dealer(){ return dealer; }
 
     void init_new_round();
     void play_round();

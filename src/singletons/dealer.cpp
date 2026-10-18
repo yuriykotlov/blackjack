@@ -1,5 +1,7 @@
 #include "dealer.hpp"
 
+#include "common.hpp"
+
 #include <iostream>
 #include <vector>
 
@@ -11,30 +13,12 @@ void Dealer::deal_to_hand(std::vector<const Card*> &hand, unsigned int x_cards){
         }
         
         hand.push_back(pDeck->draw());
-
-        std::cout << "DEALT A CARD TO PLAYER\n";
     }
-}
-
-int Dealer::check_hand_score(std::vector<const Card*> hand){
-    if(hand.empty()){
-        std::cerr << "Player has no cards in hand.\n";
-        return -1;
-    }
-
-    int amount{ 0 };
-
-    for(const Card* const card : hand){
-        if(!card) continue;
-        amount += card->number;
-    }
-    
-    return amount;
 }
 
 void Dealer::evaluate_hands(){
-    int player_score = check_hand_score(player->get_hand());
-    int dealer_score = check_hand_score(dealer_hand);
+    int player_score = get_hand_score(player->get_hand());
+    int dealer_score = get_hand_score(dealer_hand);
 
     if(player_score < dealer_score || player_score > MAX_CARD_SCORE_TO_LOSE){
         take_player_bet();
@@ -51,7 +35,6 @@ void Dealer::reset_variables(){
 
     player->get_hand().clear();
     player->set_current_bet(0);
-    player->set_total_cash(PLAYER_STARTING_CASH);
 
     dealer_hand.clear(); // dealer hand
 

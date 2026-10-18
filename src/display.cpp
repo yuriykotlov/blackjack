@@ -1,13 +1,16 @@
 #include "display.hpp"
 
-#include "common_vars.hpp"
+#include "common.hpp"
+#include "player.hpp"
+#include "dealer.hpp"
+#include "game.hpp"
 
 #include <string>
 #include <format>
 
 namespace Display{
 
-std::string card_to_string(const Card &card){
+const std::string card_to_string(const Card &card){
     std::string card_string{};
 
     if(card.type != CardType::REGULAR){
@@ -30,11 +33,10 @@ std::string card_to_string(const Card &card){
     return card_string;
 }
 
-std::string format_hand(const std::vector<const Card*> &hand){
+const std::string format_hand(const std::vector<const Card*> &hand){
     std::string hand_string{};
 
     for(const Card* card : hand){
-        std::cout << card->number;
         hand_string.append(std::format("{} ", card_to_string(*card)));
     }
 
@@ -44,7 +46,7 @@ std::string format_hand(const std::vector<const Card*> &hand){
     return hand_string;
 }
 
-std::string game_round(Player &player, const std::vector<const Card*> &dealer_hand){
+const std::string game_round(Player &player, const std::vector<const Card*> &dealer_hand){
     std::string dealer_hand_formatted = format_hand(dealer_hand);
 
     if(dealer_hand.empty()){
@@ -79,17 +81,29 @@ std::string game_round(Player &player, const std::vector<const Card*> &dealer_ha
     );
 }
 
-std::string end_round(const bool player_won, const int player_bet_placed){
+const std::string end_round(Game &game, const bool player_won, const int player_bet_placed){
+    auto player_hand = game.get_player().get_hand();
+    auto dealer_hand = game.get_dealer().get_hand();
+
+    int target_bet_amount = player_won ? player_bet_placed * 2 : player_bet_placed;
+
     return std::format(R"(
                    You {0}!
 
                Cash {0}: ${1}
 
+               
+        You had a score of {2}, with hand: {3}
+
+        The Dealer scored {4}, with hand: {5}
+
 
         [s] Keep playing    [q] Quit
         )",
         player_won ? "won" : "lost",
-        player_bet_placed
+        target_bet_amount,
+        get_hand_score(player_hand), format_hand(player_hand),
+        get_hand_score(dealer_hand), format_hand(dealer_hand)
     );
 }
 

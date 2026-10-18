@@ -17,7 +17,7 @@ const std::string Player::onboard() const{
         std::cout << '\n';
 
         if(name.empty() || name.length() > MAX_PLAYER_NAME_LEN){
-            std::cout << "Your name is not 1-12 characters.\n\n";
+            std::cout << "Your name is not 1-12 characters.\n";
         } else { break; }
     }
     

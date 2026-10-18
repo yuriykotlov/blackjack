@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common_vars.hpp"
+#include "common.hpp"
 
 #include <string>
 #include <array>

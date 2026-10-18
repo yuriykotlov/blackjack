@@ -2,6 +2,8 @@
 
 #include <string_view>
 #include <array>
+#include <vector>
+#include <iostream>
 
 // GAME VARIABLES:
 
@@ -49,3 +51,19 @@ struct Card {
 
 constexpr int CARDS_PER_SUIT{ 13 };
 constexpr int FACE_CARDS{ 3 };
+
+inline int get_hand_score(const std::vector<const Card*> &hand){
+    if(hand.empty()){
+        std::cerr << "Player has no cards in hand.\n";
+        return -1;
+    }
+
+    int amount{ 0 };
+
+    for(const Card* const card : hand){
+        if(!card) continue;
+        amount += card->number;
+    }
+    
+    return amount;
+}

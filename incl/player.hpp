@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common_vars.hpp"
+#include "common.hpp"
 
 #include <vector>
 #include <string>
@@ -26,7 +26,7 @@ public:
         size_t target_len = std::min(name.size(), size_t(MAX_PLAYER_NAME_LEN));
         std::copy_n(name.data(), target_len, m_name);
 
-        m_name[MAX_PLAYER_NAME_LEN] = '\0';
+        m_name[MAX_PLAYER_NAME_LEN + 1] = '\0';
     };
     
     const std::string get_name() const { return m_name; }

@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-char continue_option(){
+bool quit_game(){
     char option;
 
     while(true){
@@ -15,12 +15,10 @@ char continue_option(){
         } else { break; }
     }
 
-    return option;
+    return option == 'q';
 }
 
-bool quit_game(){
-    return continue_option() == 'q';
-}
+
 
 int main(){
     std::cout << R"(
@@ -38,11 +36,28 @@ int main(){
         // reset vars of game class
         game.init_new_round();
 
-        game.play_round();
+        if(game.get_player().get_total_cash() > 0){
+            // while loop
+            game.play_round();
 
-        // end round, and prompt if player wants to quit or not
-        game.end_round();
-        if(quit_game()) return 0;
+            // end round, and prompt if player wants to quit or not
+            game.end_round();
+            if(quit_game()) return 0;
+
+        } else{
+            std::cout << "\033[2J\033[1;1H";
+
+            std::cout << R"(
+            Unfortunately, you ran out of cash
+                 to play Blackjack with...
+            
+            [s] Start new game      [q] Exit
+            )" << '\n';
+            
+            if(quit_game()) return 0;
+
+            game.get_player().set_total_cash(PLAYER_STARTING_CASH);
+        }
     }
 
     return 0;

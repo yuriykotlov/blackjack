@@ -12,8 +12,6 @@ static int get_random_int(int min, int max){
 
 // build deck
 Deck::Deck(){
-    std::cout << "BUILDING DECK\n";
-
     total_cards.reserve(CARDS_PER_SUIT * SUITS.size());
     drawn_cards.reserve(CARDS_PER_SUIT * SUITS.size());
 
@@ -60,8 +58,6 @@ void Deck::return_drawn_cards(){
 }
 
 void Deck::shuffle(){
-    std::cout << total_cards.size();
-
     if (total_cards.empty()){
         std::cout << "There are no cards to shuffle in the deck.\n";
         return;
