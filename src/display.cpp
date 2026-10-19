@@ -103,7 +103,7 @@ const std::string game_round(Player &player, const Hand &dealer_hand){
     );
 }
 
-const std::string end_round(Game &game, int player_bet_placed){
+const std::string end_round(Game &game, int player_bet){
     const auto &player_hand = game.get_player().get_hand();
     const auto &dealer_hand = game.get_dealer().get_hand();
 
@@ -113,7 +113,7 @@ const std::string end_round(Game &game, int player_bet_placed){
     const auto status_string = [&]() -> std::pair<std::string, std::string> {
         switch(get_hand_status(player_hand, get_hand_score(dealer_hand))){
             case HandStatus::WIN:
-                player_bet_placed *= PLAYER_WIN_CASH_MULTIPLIER;
+                player_bet *= PLAYER_WIN_CASH_MULTIPLIER;
                 return {"won", "recieved"};
             case HandStatus::LOSE:
                 return {"lost", "lost"};
@@ -137,7 +137,7 @@ const std::string end_round(Game &game, int player_bet_placed){
         )",
         status_string.first,
         status_string.second,
-        player_bet_placed,
+        player_bet,
         get_hand_score(player_hand), format_hand(player_hand),
         get_hand_score(dealer_hand), format_hand(dealer_hand)
     );

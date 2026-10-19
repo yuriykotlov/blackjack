@@ -12,6 +12,7 @@ constexpr int MAX_PLAYERS = 1;
 constexpr int MAX_PLAYER_NAME_LEN = 12;
 constexpr int PLAYER_STARTING_CASH = 500;
 constexpr int PLAYER_WIN_CASH_MULTIPLIER = 2;
+constexpr double PLAYER_FOLDED_CASH_MULTIPLIER = 0.5;
 
 constexpr int MAX_TURN_TIME_SEC = 20;
 constexpr int MAX_CARD_SCORE = 21;
@@ -66,6 +67,12 @@ using Hand = std::vector<const Card*>;
 constexpr int CARDS_PER_SUIT{ 13 };
 constexpr int FACE_CARDS{ 3 };
 
+constexpr bool hand_has_card_type(const Hand &hand, const CardType card_type){
+    return std::ranges::any_of(hand, [card_type](const Card* const card){
+        return card && card->type == card_type;
+    });
+}
+
 // Calculate the given hand's score from its cards.
 constexpr int get_hand_score(const Hand &hand){
     if(hand.empty()) return -1;
@@ -86,9 +93,7 @@ constexpr int get_hand_score(const Hand &hand){
 
     if(amount > MAX_CARD_SCORE){
         // check if hand has an ace
-        const bool has_ace = std::ranges::any_of(hand, [](const Card* const card){
-            return card && card->type == CardType::ACE;
-        });
+        const bool has_ace = hand_has_card_type(hand, CardType::ACE);
 
         // an ace card initially has a value of 11, but if it causes
         // the player to lose, it is set to a value of 1.

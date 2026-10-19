@@ -10,10 +10,11 @@ private:
     Player player;
     Dealer &dealer;
 
-    bool first_turn = true;
     int player_bet_placed = 0;
+    bool is_first_turn = true;
+    bool has_player_folded = false;
 
-    void prompt_player_options(const bool is_first_turn);
+    void prompt_player_options();
 
 public:
     Game(const std::pair<Player, Dealer&> &pair) : player(pair.first), dealer(pair.second){

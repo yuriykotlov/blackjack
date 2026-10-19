@@ -16,6 +16,12 @@ void Dealer::deal_to_hand(Hand &hand, unsigned int x_cards){
     }
 }
 
+void Dealer::on_player_fold(){
+    has_player_folded = true;
+    refund_player(PLAYER_FOLDED_CASH_MULTIPLIER);
+    set_finishing_round(true);
+}
+
 void Dealer::evaluate_hands(){
     // no need to calculate the dealer's hand status as its inverse of the player's hand status
     const HandStatus player_hand_status = get_hand_status(player->get_hand(), get_hand_score(dealer_hand));

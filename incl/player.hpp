@@ -12,12 +12,11 @@ class Player{
 private:
     Hand hand{};
 
-    char m_name[MAX_PLAYER_NAME_LEN + 1]{};
-
     int current_bet{ 0 };
     int total_cash{ PLAYER_STARTING_CASH };
-
     int last_bet_placed{ 0 };
+    
+    char m_name[MAX_PLAYER_NAME_LEN + 1]{};
 
 public:
     Player(){
