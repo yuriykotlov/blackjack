@@ -1,6 +1,7 @@
 #include "game.hpp"
 
 #include <iostream>
+#include <limits>
 
 bool quit_game(){
     char option;
@@ -12,13 +13,13 @@ bool quit_game(){
 
         if(option != 's' && option != 'q'){
             std::cout << "\nYou didn't enter a valid option, try again.\n";
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         } else { break; }
     }
 
     return option == 'q';
 }
-
-
 
 int main(){
     std::cout << R"(

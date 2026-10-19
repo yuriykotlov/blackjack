@@ -10,7 +10,7 @@
 
 class Player{
 private:
-    std::vector<const Card*> hand{};
+    Hand hand{};
 
     char m_name[MAX_PLAYER_NAME_LEN + 1]{};
 
@@ -30,7 +30,7 @@ public:
     };
     
     const std::string get_name() const { return m_name; }
-    std::vector<const Card*> &get_hand(){ return hand; }
+    Hand &get_hand(){ return hand; }
 
     const int get_current_bet() const { return current_bet; }
     const int get_total_cash() const { return total_cash; }

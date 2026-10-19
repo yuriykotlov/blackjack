@@ -7,8 +7,30 @@
 
 #include <string>
 #include <format>
+#include <utility>
+
+#if _WIN32
+#include <windows.h>
+#endif
+
+#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#endif
 
 namespace Display{
+
+void enable_ansi_codes() {
+#if _WIN32
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hConsole == INVALID_HANDLE_VALUE) return;
+
+    DWORD dwMode = 0;
+    if (!GetConsoleMode(hConsole, &dwMode)) return;
+
+    dwMode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
+    SetConsoleMode(hConsole, dwMode);
+#endif
+}
 
 const std::string card_to_string(const Card &card){
     std::string card_string{};
@@ -33,7 +55,7 @@ const std::string card_to_string(const Card &card){
     return card_string;
 }
 
-const std::string format_hand(const std::vector<const Card*> &hand){
+const std::string format_hand(const Hand &hand){
     std::string hand_string{};
 
     for(const Card* card : hand){
@@ -46,7 +68,7 @@ const std::string format_hand(const std::vector<const Card*> &hand){
     return hand_string;
 }
 
-const std::string game_round(Player &player, const std::vector<const Card*> &dealer_hand){
+const std::string game_round(Player &player, const Hand &dealer_hand){
     std::string dealer_hand_formatted = format_hand(dealer_hand);
 
     if(dealer_hand.empty()){
@@ -81,27 +103,41 @@ const std::string game_round(Player &player, const std::vector<const Card*> &dea
     );
 }
 
-const std::string end_round(Game &game, const bool player_won, const int player_bet_placed){
-    auto player_hand = game.get_player().get_hand();
-    auto dealer_hand = game.get_dealer().get_hand();
+const std::string end_round(Game &game, int player_bet_placed){
+    const auto &player_hand = game.get_player().get_hand();
+    const auto &dealer_hand = game.get_dealer().get_hand();
 
-    int target_bet_amount = player_won ? player_bet_placed * 2 : player_bet_placed;
+    // Return a pair of strings to display in the console according to the player's hand
+    //  .first can be: won / lost / drawed
+    //  .second can be: recieved / lost / refunded
+    const auto status_string = [&]() -> std::pair<std::string, std::string> {
+        switch(get_hand_status(player_hand, get_hand_score(dealer_hand))){
+            case HandStatus::WIN:
+                player_bet_placed *= PLAYER_WIN_CASH_MULTIPLIER;
+                return {"won", "recieved"};
+            case HandStatus::LOSE:
+                return {"lost", "lost"};
+            default:
+                return {"drawed", "refunded"};
+        }
+    }();
 
     return std::format(R"(
                    You {0}!
 
-               Cash {0}: ${1}
+               Cash {1}: ${2}
 
                
-        You had a score of {2}, with hand: {3}
+        You had a score of {3}, with hand: {4}
 
-        The Dealer scored {4}, with hand: {5}
+        The Dealer scored {5}, with hand: {6}
 
 
         [s] Keep playing    [q] Quit
         )",
-        player_won ? "won" : "lost",
-        target_bet_amount,
+        status_string.first,
+        status_string.second,
+        player_bet_placed,
         get_hand_score(player_hand), format_hand(player_hand),
         get_hand_score(dealer_hand), format_hand(dealer_hand)
     );

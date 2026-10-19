@@ -4,6 +4,7 @@
 #include <vector>
 #include <format>
 #include <string>
+#include <limits>
 
 const std::string Player::onboard() const{
     std::string name{};
@@ -54,24 +55,25 @@ const Options Player::play_option(const bool double_down, const bool insurance){
 
 void Player::place_bet(){
     std::cout << std::format(
-        "Your current cash balance is: {0}.\nEnter an amount to bet (0-{0})",
-        total_cash 
+        "Your current cash balance is: {0}.\nEnter an amount to bet (0-{0}), rounded to the nearest number.",
+        total_cash
     ) << "\n -> $";
 
-    int amount{ 0 };
+    int amount = 0;
 
     while(true){
         if(std::cin >> amount){
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
             if(amount > 0 && amount <= total_cash){
                 break;
             }
             std::cout << "\nYou have entered an invalid amount, please try again:\n -> $";
         } else{
-            std::cout << "\nYou have entered an invalid amount, please try again:\n -> $";
             std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "\nYou have entered an invalid amount, please try again:\n -> $";
         }
-        
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
     total_cash -= amount;

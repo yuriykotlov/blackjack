@@ -8,6 +8,7 @@
 #include <utility>
 
 const std::pair<Player, Dealer&> Game::init_game(){
+    Display::enable_ansi_codes();
     return {Player{}, Dealer::get_dealer()};
 }
 
@@ -41,11 +42,10 @@ void Game::end_round(){
     int player_score = get_hand_score(player.get_hand());
 
     // i know theres no draw condition so the player will win even if they draw for now
-    bool has_player_won = (player_score <= MAX_CARD_SCORE_TO_LOSE) && (player_score >= get_hand_score(dealer.get_hand()));
+    bool has_player_won = (player_score <= MAX_CARD_SCORE) && (player_score >= get_hand_score(dealer.get_hand()));
 
     std::cout << Display::end_round(
         *this,
-        has_player_won,
         player.get_last_bet_placed()
     ) << '\n';
 
@@ -64,7 +64,7 @@ void Game::prompt_player_options(const bool is_first_turn){
         case Options::HIT:
             dealer.deal_to_hand(player.get_hand(), 1);
 
-            if(get_hand_score(player.get_hand()) >= MAX_CARD_SCORE_TO_LOSE){
+            if(get_hand_score(player.get_hand()) >= MAX_CARD_SCORE){
                 dealer.evaluate_hands();
             }
             break;

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 
-void Dealer::deal_to_hand(std::vector<const Card*> &hand, unsigned int x_cards){
+void Dealer::deal_to_hand(Hand &hand, unsigned int x_cards){
     for(int i = 0; i < x_cards; ++i){
         if(pDeck->get_total_cards().empty()){
             std::cerr << "No cards to deal to player.\n";
@@ -17,13 +17,15 @@ void Dealer::deal_to_hand(std::vector<const Card*> &hand, unsigned int x_cards){
 }
 
 void Dealer::evaluate_hands(){
-    int player_score = get_hand_score(player->get_hand());
-    int dealer_score = get_hand_score(dealer_hand);
+    // no need to calculate the dealer's hand status as its inverse of the player's hand status
+    const HandStatus player_hand_status = get_hand_status(player->get_hand(), get_hand_score(dealer_hand));
 
-    if(player_score < dealer_score || player_score > MAX_CARD_SCORE_TO_LOSE){
-        take_player_bet();
-    } else{
+    if(player_hand_status == HandStatus::WIN){
         payout_to_player();
+    } else if(player_hand_status == HandStatus::DRAW) {
+        refund_player();
+    } else{
+        take_player_bet();
     }
 
     set_finishing_round(true);
