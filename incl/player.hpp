@@ -32,11 +32,11 @@ public:
     // Getters
 
     Hand &get_hand(){ return hand; }
-    const std::string get_name() const { return m_name; }
-    const int get_total_cash() const { return total_cash; }
-    const int get_current_bet() const { return current_bet; }
-    const int get_insurance_bet() const { return insurance_bet; }
-    const Options get_chosen_option() const { return chosen_option; }
+    std::string get_name() const { return m_name; }
+    int get_total_cash() const { return total_cash; }
+    int get_current_bet() const { return current_bet; }
+    int get_insurance_bet() const { return insurance_bet; }
+    Options get_chosen_option() const { return chosen_option; }
 
     // Setters
 
@@ -52,7 +52,7 @@ public:
     }
 
     // Ask the player for their name.
-    const std::string onboard() const;
+    std::string onboard() const;
     // Ask the player to choose an option to play.
     void play_option(const bool double_down, const bool insurance);
 };

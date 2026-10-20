@@ -6,7 +6,7 @@
 #include <string>
 #include <limits>
 
-const std::string Player::onboard() const{
+std::string Player::onboard() const{
     std::string name{};
 
     while(true){

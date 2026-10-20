@@ -9,28 +9,25 @@ Deck::Deck(){
     total_cards.reserve(CARDS_PER_SUIT * SUITS.size());
     drawn_cards.reserve(CARDS_PER_SUIT * SUITS.size());
 
-    std::cout << total_cards.size();
-
     char current_suit_index = 0;
 
     for (auto const &suit : SUITS){
-        for (int i = 2; i <= CARDS_PER_SUIT; ++i){
+        for (int i = 0; i <= CARDS_PER_SUIT - 1; ++i){
+            int card_number = i + 2;
             Card new_card{
                 // will cast to face cards type once above 10, as 13 - 3 = 10
-                i <= CARDS_PER_SUIT - FACE_CARDS ? CardType::REGULAR : static_cast<CardType>(i),
+                i <= (CARDS_PER_SUIT - 1) - FACE_CARDS ? CardType::REGULAR : static_cast<CardType>(card_number),
                 current_suit_index,
-                static_cast<char>(i)
+                static_cast<char>(card_number)
             };
 
             total_cards.push_back(new_card);
         }
         current_suit_index += 1;
     }
-    
-    std::cout << total_cards.size();
 }
 
-const Card* Deck::draw(){
+Card* const Deck::draw(){
     int random = get_random_int(0, total_cards.size() - 1);
 
     drawn_cards.emplace_back(total_cards[random]);

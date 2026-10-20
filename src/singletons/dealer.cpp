@@ -18,7 +18,19 @@ void Dealer::deal_to_hand(Hand &hand, unsigned int x_cards){
     }
 }
 
-void Dealer::decide_to_draw_card(){
+// Return's true if the dealer want's to keep playing, and false if not.
+bool Dealer::decide_to_draw_card(){
+    int dealer_score = get_hand_score(dealer_hand);
+
+    // no need to decide if the dealer's score is higher than the player's
+    if(has_finished_round){
+        if(dealer_score > get_hand_score(player->get_hand())) return false;
+    }
+    
+    if(dealer_score >= MAX_CARD_SCORE){
+        return false;
+    }
+
     int current_score = get_hand_score(dealer_hand);
 
     int min_percent_to_draw = 100;
@@ -32,6 +44,9 @@ void Dealer::decide_to_draw_card(){
     
     if(get_random_int(0, 100) >= min_percent_to_draw){
         deal_to_hand(dealer_hand, 1);
+        return true;
+    } else{
+        return false;
     }
 }
 
@@ -51,9 +66,7 @@ void Dealer::evaluate_hands(){
         payout_to_player();
     } else if(player_hand_status == HandStatus::DRAW) {
         refund_player();
-    } else{
-        take_player_bet();
-
+    } else{ // HandStatus::LOSE
         if(player->get_chosen_option() == Options::INSURANCE && dealer_hand_score == MAX_CARD_SCORE){
             player->add_to_total_cash(player->get_insurance_bet() * PLAYER_INSURANCE_PAYOUT);
         } else{
@@ -91,7 +104,7 @@ void Dealer::ask_for_player_bet(){
 
     int amount = 0;
 
-    while(!(std::cin >> amount)){
+    while(!(std::cin >> amount) || amount > player->get_total_cash() || amount <= 0){
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "\nYou have entered an invalid amount, please try again:\n -> $";

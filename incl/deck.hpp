@@ -28,10 +28,10 @@ public:
         return deck;
     }
     
-    const std::vector<Card> &get_total_cards() const { return total_cards; }
-    const std::vector<Card> &get_drawn_cards() const { return drawn_cards; }
+    std::vector<Card> &get_total_cards() { return total_cards; }
+    std::vector<Card> &get_drawn_cards() { return drawn_cards; }
     
-    const Card* draw();
+    Card* const draw();
 
     void shuffle();
     void return_drawn_cards(); // return drawn cards to the end of the total_cards

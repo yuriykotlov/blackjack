@@ -19,7 +19,7 @@
 
 namespace Display{
 
-void enable_ansi_codes() {
+void enable_ansi_codes(){
 #if _WIN32
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (hConsole == INVALID_HANDLE_VALUE) return;
@@ -32,7 +32,7 @@ void enable_ansi_codes() {
 #endif
 }
 
-const std::string card_to_string(const Card &card){
+std::string card_to_string(const Card &card){
     std::string card_string{};
 
     if(card.type != CardType::REGULAR){
@@ -55,7 +55,7 @@ const std::string card_to_string(const Card &card){
     return card_string;
 }
 
-const std::string format_hand(const Hand &hand){
+std::string format_hand(const Hand &hand){
     std::string hand_string{};
 
     for(const Card* card : hand){
@@ -68,12 +68,20 @@ const std::string format_hand(const Hand &hand){
     return hand_string;
 }
 
-const std::string game_round(Player &player, const Hand &dealer_hand){
+std::string game_round(Player &player, const Hand &dealer_hand){
     std::string dealer_hand_formatted = format_hand(dealer_hand);
 
     if(dealer_hand.empty()){
         std::cerr << "Dealer hand is empty?\n";
         return{};
+    } else if(dealer_hand.size() == STARTING_HAND_CARD_AMOUNT){
+        for(int i = dealer_hand_formatted.length() - 1; i > 0; --i){
+            if(dealer_hand_formatted[i] == ' '){
+                dealer_hand_formatted.erase(i + 1);
+                dealer_hand_formatted += "[?]";
+                break;
+            }
+        }
     }
 
     return std::format(R"(
@@ -94,7 +102,7 @@ const std::string game_round(Player &player, const Hand &dealer_hand){
     );
 }
 
-const std::string end_round(Game &game, int player_bet){
+std::string end_round(Game &game, int player_bet){
     const auto &player_hand = game.get_player().get_hand();
     const auto &dealer_hand = game.get_dealer().get_hand();
 

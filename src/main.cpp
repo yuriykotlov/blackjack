@@ -31,7 +31,7 @@ int main(){
     if(quit_game()) return 0;
 
     // start of game
-    Game game{Game::init_game()};
+    Game game{game.init_game()};
 
     while (true){
         // reset vars of game class
@@ -43,7 +43,7 @@ int main(){
 
             // end round, and prompt if player wants to quit or not
             game.end_round();
-            if(quit_game()) return 0;
+            if(quit_game()) break;
 
         } else{
             std::cout << "\033[2J\033[1;1H";
@@ -55,7 +55,7 @@ int main(){
             [s] Start new game      [q] Exit
             )" << '\n';
             
-            if(quit_game()) return 0;
+            if(quit_game()) break;
         }
     }
 

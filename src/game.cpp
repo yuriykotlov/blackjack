@@ -7,7 +7,7 @@
 
 #include <utility>
 
-const std::pair<Player, Dealer&> Game::init_game(){
+std::pair<Player, Dealer&> Game::init_game(){
     Display::enable_ansi_codes();
     return {Player{}, Dealer::get_dealer()};
 }
@@ -15,12 +15,9 @@ const std::pair<Player, Dealer&> Game::init_game(){
 // reset all vars in Game class
 void Game::init_new_round(){
     std::cout << "\033[2J\033[1;1H";
-    
+        
     is_first_turn = true;
-
     dealer.reset_variables();
-    
-    player.set_total_cash(PLAYER_STARTING_CASH);
     player.set_current_bet(0);
     player.set_insurance_bet(0);
 }
@@ -37,6 +34,8 @@ void Game::play_round(){
 
         if(dealer.is_finishing_round()) break;
     }
+
+    while(dealer.decide_to_draw_card());
 }
 
 void Game::end_round(){
@@ -63,7 +62,7 @@ void Game::end_round(){
 void Game::prompt_player_options(){
     has_player_folded = false;
 
-    bool dealer_has_ace = hand_has_card_type(dealer.get_hand(), CardType::ACE);
+    bool dealer_has_ace = hand_has_card_type(dealer.get_hand(), CardType::ACE, 0);
 
     player.play_option(is_first_turn, dealer_has_ace);
 

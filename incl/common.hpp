@@ -80,7 +80,13 @@ using Hand = std::vector<const Card*>;
 constexpr int CARDS_PER_SUIT = 13;
 constexpr int FACE_CARDS = 3;
 
-constexpr bool hand_has_card_type(const Hand &hand, const CardType card_type){
+constexpr bool hand_has_card_type(const Hand &hand, const CardType card_type, unsigned int card_position = -1){
+    if(hand.empty()) return false;
+
+    if(card_position > -1){
+        return hand[0]->type == card_type;
+    }
+
     return std::ranges::any_of(hand, [card_type](const Card* const card){
         return card && card->type == card_type;
     });
@@ -110,19 +116,24 @@ constexpr int get_hand_score(const Hand &hand){
 
         // an ace card initially has a value of 11, but if it causes
         // the player to lose, it is set to a value of 1.
-        if(has_ace) amount = (amount - ACE_DEFAULT_VALUE) + ACE_ALTERNATE_VALUE;
+        if(has_ace){
+            amount -= ACE_DEFAULT_VALUE;
+            amount += ACE_ALTERNATE_VALUE;
+        }
     }
     
     return amount;
 }
 
-// Return a HandStatus by calculating the hand's score and comparing it to the winning_score int.
-constexpr HandStatus get_hand_status(const Hand &hand, const int winning_score){
+// Return a HandStatus by calculating the hand's score and comparing it to the other_score int.
+constexpr HandStatus get_hand_status(const Hand &hand, const int other_score){
+    if(other_score > MAX_CARD_SCORE) return HandStatus::WIN;
+
     const int hand_score = get_hand_score(hand);
     
-    if(hand_score > winning_score && hand_score <= MAX_CARD_SCORE){
+    if(hand_score > other_score && hand_score <= MAX_CARD_SCORE){
         return HandStatus::WIN;
-    } else if(hand_score == winning_score){
+    } else if(hand_score == other_score){
         return HandStatus::DRAW;
     } else{
         return HandStatus::LOSE;
