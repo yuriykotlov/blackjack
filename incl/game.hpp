@@ -10,7 +10,6 @@ private:
     Player player;
     Dealer &dealer;
 
-    int player_bet_placed = 0;
     bool is_first_turn = true;
     bool has_player_folded = false;
 

@@ -56,8 +56,6 @@ int main(){
             )" << '\n';
             
             if(quit_game()) return 0;
-
-            game.get_player().set_total_cash(PLAYER_STARTING_CASH);
         }
     }
 

@@ -12,10 +12,11 @@ class Player{
 private:
     Hand hand{};
 
-    int current_bet{ 0 };
-    int total_cash{ PLAYER_STARTING_CASH };
-    int last_bet_placed{ 0 };
-    
+    int total_cash = PLAYER_STARTING_CASH;
+    int current_bet = 0;
+    int insurance_bet = 0;
+
+    Options chosen_option = Options::NONE;
     char m_name[MAX_PLAYER_NAME_LEN + 1]{};
 
 public:
@@ -28,28 +29,30 @@ public:
         m_name[MAX_PLAYER_NAME_LEN + 1] = '\0';
     };
     
-    const std::string get_name() const { return m_name; }
+    // Getters
+
     Hand &get_hand(){ return hand; }
-
-    const int get_current_bet() const { return current_bet; }
+    const std::string get_name() const { return m_name; }
     const int get_total_cash() const { return total_cash; }
-    const int get_last_bet_placed() const { return last_bet_placed; }
+    const int get_current_bet() const { return current_bet; }
+    const int get_insurance_bet() const { return insurance_bet; }
+    const Options get_chosen_option() const { return chosen_option; }
 
-    void set_current_bet(int new_bet){
-        current_bet = new_bet;
-        // if its equal to 0 then its being reset, and we don't want that
-        if(current_bet != 0) last_bet_placed = current_bet;
-    }
+    // Setters
 
-    void set_total_cash(int new_cash){
-        total_cash = new_cash;
-    }
+    void set_total_cash(int new_cash){ total_cash = new_cash; }
+    void set_current_bet(int new_bet){ current_bet = new_bet; }
+    void set_insurance_bet(int new_bet){ insurance_bet = new_bet; }
+    
+    void add_to_total_cash(int extra_cash){ total_cash += extra_cash; }
+    void add_to_current_bet(int extra_bet){ current_bet += extra_bet; }
 
     void give_card(const Card *card){
         hand.push_back(card);
     }
 
+    // Ask the player for their name.
     const std::string onboard() const;
-    void place_bet();
-    const Options play_option(const bool double_down, const bool insurance);
+    // Ask the player to choose an option to play.
+    void play_option(const bool double_down, const bool insurance);
 };

@@ -1,19 +1,15 @@
 #include "deck.hpp"
 
+#include "common.hpp"
+
 #include <iostream>
-
-#include <random>
-
-static std::mt19937 gen( std::random_device{}() );
-
-static int get_random_int(int min, int max){
-    return std::uniform_int_distribution<int>(min, max)(gen);
-}
 
 // build deck
 Deck::Deck(){
     total_cards.reserve(CARDS_PER_SUIT * SUITS.size());
     drawn_cards.reserve(CARDS_PER_SUIT * SUITS.size());
+
+    std::cout << total_cards.size();
 
     char current_suit_index = 0;
 

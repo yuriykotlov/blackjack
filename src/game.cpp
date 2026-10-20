@@ -16,10 +16,13 @@ const std::pair<Player, Dealer&> Game::init_game(){
 void Game::init_new_round(){
     std::cout << "\033[2J\033[1;1H";
     
-    player_bet_placed = 0;
     is_first_turn = true;
 
     dealer.reset_variables();
+    
+    player.set_total_cash(PLAYER_STARTING_CASH);
+    player.set_current_bet(0);
+    player.set_insurance_bet(0);
 }
 
 void Game::play_round(){
@@ -40,10 +43,10 @@ void Game::end_round(){
     std::cout << "\033[2J\033[1;1H";
 
     int player_score = get_hand_score(player.get_hand());
-    int player_bet = player.get_last_bet_placed();
+    int player_bet = player.get_current_bet();
 
     if(has_player_folded){
-        player_bet *= PLAYER_FOLDED_CASH_MULTIPLIER;
+        player_bet *= FOLDED_CHOICE_MULTIPLIER;
     }
 
     // i know theres no draw condition so the player will win even if they draw for now
@@ -62,7 +65,9 @@ void Game::prompt_player_options(){
 
     bool dealer_has_ace = hand_has_card_type(dealer.get_hand(), CardType::ACE);
 
-    switch(player.play_option(is_first_turn, dealer_has_ace)){
+    player.play_option(is_first_turn, dealer_has_ace);
+
+    switch(player.get_chosen_option()){
         case Options::STAND:
             // end turn
             dealer.evaluate_hands();
@@ -84,10 +89,8 @@ void Game::prompt_player_options(){
 
         case Options::DOUBLE_DOWN:
             dealer.deal_to_hand(player.get_hand(), 1);
-
-            player_bet_placed = player.get_current_bet();
-            player.set_total_cash(player.get_total_cash() - player_bet_placed);
-            player.set_current_bet(player_bet_placed * 2);
+            player.add_to_total_cash(-player.get_current_bet());
+            player.add_to_current_bet(player.get_current_bet());
 
             dealer.evaluate_hands();
             break;
@@ -96,13 +99,10 @@ void Game::prompt_player_options(){
             // the player bets half of their current bet, and
             // if the dealer has blackjack and they lose, they get payed out insurance * 2 which
             // equals to their original bet amount
-            player_bet_placed = player.get_current_bet();
-            player.set_total_cash(player.get_total_cash() - (player_bet_placed / 2));
-            player.set_current_bet(player_bet_placed + (player_bet_placed / 2));
+            player.set_insurance_bet(player.get_current_bet() * INSURANCE_CHOICE_MULTIPLIER);
 
-            // TODO:
-            // implement dealer remembering that they took money from the player for insurance,
-            // and payout or refund accordingly
+            player.add_to_total_cash(-player.get_insurance_bet());
+            player.add_to_current_bet(player.get_insurance_bet());
             
             dealer.evaluate_hands();
             break;

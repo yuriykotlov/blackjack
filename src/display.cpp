@@ -74,15 +74,6 @@ const std::string game_round(Player &player, const Hand &dealer_hand){
     if(dealer_hand.empty()){
         std::cerr << "Dealer hand is empty?\n";
         return{};
-        
-    } else if(dealer_hand.size() == STARTING_HAND_CARD_AMOUNT){
-        for(int i = dealer_hand_formatted.length() - 1; i > 0; --i){
-            if(dealer_hand_formatted[i] == ' '){
-                dealer_hand_formatted.erase(i + 1);
-                dealer_hand_formatted += "[?]";
-                break;
-            }
-        }
     }
 
     return std::format(R"(
@@ -113,7 +104,7 @@ const std::string end_round(Game &game, int player_bet){
     const auto status_string = [&]() -> std::pair<std::string, std::string> {
         switch(get_hand_status(player_hand, get_hand_score(dealer_hand))){
             case HandStatus::WIN:
-                player_bet *= PLAYER_WIN_CASH_MULTIPLIER;
+                player_bet *= PLAYER_WIN_CASH_PAYOUT;
                 return {"won", "recieved"};
             case HandStatus::LOSE:
                 return {"lost", "lost"};

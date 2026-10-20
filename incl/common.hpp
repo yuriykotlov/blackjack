@@ -5,14 +5,26 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <random>
+
+inline std::mt19937 gen( std::random_device{}() );
+
+// Choose a random number from min to max (inclusive)
+const inline int get_random_int(int min, int max){
+    return std::uniform_int_distribution<int>(min, max)(gen);
+}
 
 // GAME VARIABLES:
 
 constexpr int MAX_PLAYERS = 1;
 constexpr int MAX_PLAYER_NAME_LEN = 12;
 constexpr int PLAYER_STARTING_CASH = 500;
-constexpr int PLAYER_WIN_CASH_MULTIPLIER = 2;
-constexpr double PLAYER_FOLDED_CASH_MULTIPLIER = 0.5;
+
+constexpr int PLAYER_INSURANCE_PAYOUT = 2;
+constexpr int PLAYER_WIN_CASH_PAYOUT = 2;
+constexpr int DOUBLE_DOWN_CHOICE_MULTIPLIER = 2;
+constexpr double FOLDED_CHOICE_MULTIPLIER = 0.5;
+constexpr double INSURANCE_CHOICE_MULTIPLIER = 0.5;
 
 constexpr int MAX_TURN_TIME_SEC = 20;
 constexpr int MAX_CARD_SCORE = 21;
@@ -21,6 +33,7 @@ constexpr int X_CARDS_DEALT_PER_TURN = 2;
 constexpr int STARTING_HAND_CARD_AMOUNT = 2;
 
 enum class Options : char{
+    NONE = 0,
     STAND = 1,
     HIT = 2,
     FOLD = 3,
@@ -64,8 +77,8 @@ struct Card {
 
 using Hand = std::vector<const Card*>;
 
-constexpr int CARDS_PER_SUIT{ 13 };
-constexpr int FACE_CARDS{ 3 };
+constexpr int CARDS_PER_SUIT = 13;
+constexpr int FACE_CARDS = 3;
 
 constexpr bool hand_has_card_type(const Hand &hand, const CardType card_type){
     return std::ranges::any_of(hand, [card_type](const Card* const card){

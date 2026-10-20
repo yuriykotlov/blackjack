@@ -8,5 +8,5 @@
 namespace Display{
     void enable_ansi_codes();
     const std::string game_round(Player &player, const Hand &dealer_hand);
-    const std::string end_round(Game &game, const int player_bet_placed);
+    const std::string end_round(Game &game, const int player_bet);
 }

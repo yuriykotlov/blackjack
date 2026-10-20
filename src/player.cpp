@@ -25,7 +25,7 @@ const std::string Player::onboard() const{
     return name;
 }
 
-const Options Player::play_option(const bool double_down, const bool insurance){
+void Player::play_option(const bool double_down, const bool insurance){
     std::cout << std::format(R"(
         Choose an option to play:
 
@@ -49,34 +49,6 @@ const Options Player::play_option(const bool double_down, const bool insurance){
             std::cout << "\nThe option you entered was not a valid option (1-5).\nChoose an option to play: ";
         } else { break; }
     }
-
-    return static_cast<Options>(option);
-}
-
-void Player::place_bet(){
-    std::cout << std::format(
-        "Your current cash balance is: {0}.\nEnter an amount to bet (0-{0}), rounded to the nearest number.",
-        total_cash
-    ) << "\n -> $";
-
-    int amount = 0;
-
-    while(true){
-        if(std::cin >> amount){
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-            if(amount > 0 && amount <= total_cash){
-                break;
-            }
-            std::cout << "\nYou have entered an invalid amount, please try again:\n -> $";
-        } else{
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "\nYou have entered an invalid amount, please try again:\n -> $";
-        }
-    }
-
-    total_cash -= amount;
-    current_bet = amount;
-    last_bet_placed = current_bet;
+    
+    chosen_option = static_cast<Options>(option);
 }
