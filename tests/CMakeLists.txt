@@ -17,4 +17,4 @@ add_executable(blackjack_test ${TEST_FILES} ${CMAKE_SOURCE_DIR}/src/singletons/d
 target_include_directories(blackjack_test PRIVATE ${CMAKE_SOURCE_DIR}/incl)
 target_link_libraries(blackjack_test PRIVATE gtest_main)
 
-gtest_discover_tests(blackjack_test EXTRA_ARGS --arg1 "${CMAKE_CURRENT_SOURCE_DIR}/data")
+gtest_discover_tests(blackjack_test)

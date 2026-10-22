@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "deck.hpp"
 
-TEST(DeckTest, CardsCreated){
+TEST(DeckTest, Cards){
     Deck& deck = Deck::get_deck();
 
     // standard deck size is 52
