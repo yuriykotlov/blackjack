@@ -49,7 +49,7 @@ std::string card_to_string(const Card &card){
         card_string.append(std::to_string(card.number));
         
         // first letter of suit
-        card_string.push_back(SUITS[card.suit_index].front());
+        card_string.push_back(suit_to_string(card.suit).front());
     }
 
     return card_string;
@@ -66,6 +66,10 @@ std::string format_hand(const Hand &hand){
     hand_string.pop_back();
 
     return hand_string;
+}
+
+std::string_view suit_to_string(Suit suit){
+    return SUIT_STRINGS.at(static_cast<int>(suit));
 }
 
 std::string game_round(Player &player, const Hand &dealer_hand){

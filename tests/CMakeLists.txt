@@ -10,9 +10,12 @@ include(GoogleTest)
 set(gtest_force_shared_crt OFF CACHE BOOL "" FORCE)
 add_subdirectory("googletest")
 
-file(GLOB TEST_FILES "*.cpp")
+file(GLOB TEST_SOURCES "*.cpp")
 
-add_executable(blackjack_test ${TEST_FILES} ${CMAKE_SOURCE_DIR}/src/singletons/deck.cpp)
+file(GLOB_RECURSE GAME_SOURCES "${CMAKE_SOURCE_DIR}/src/*.cpp")
+list(REMOVE_ITEM GAME_SOURCES "${CMAKE_SOURCE_DIR}/src/main.cpp")
+
+add_executable(blackjack_test ${TEST_SOURCES} ${GAME_SOURCES})
 
 target_include_directories(blackjack_test PRIVATE ${CMAKE_SOURCE_DIR}/incl)
 target_link_libraries(blackjack_test PRIVATE gtest_main)

@@ -11,7 +11,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "$<1:${CMAKE_BINARY_DIR}>")
 add_executable(blackjack ${SOURCES})
 target_include_directories(blackjack PRIVATE ${PROJECT_SOURCE_DIR}/incl)
 
-option(BUILD_TESTS "Build the test directory (requires the GoogleTest submodule)" OFF)
+option(BUILD_TESTS "Build the test directory (requires the GoogleTest submodule)" ON)
 
 if(BUILD_TESTS)
     enable_testing()

@@ -53,11 +53,19 @@ constexpr int FACE_CARD_VALUE = 10;
 constexpr int ACE_DEFAULT_VALUE = 11;
 constexpr int ACE_ALTERNATE_VALUE = 1;
 
-constexpr std::array<std::string_view, 4> SUITS{
+constexpr std::array<std::string_view, 4> SUIT_STRINGS{
     "Clubs",
     "Diamonds",
     "Hearts",
     "Spades"
+};
+
+enum class Suit : char{
+    CLUBS = 0,
+    DIAMONDS = 1,
+    HEARTS = 2,
+    SPADES = 3,
+    COUNT
 };
 
 // type char is fine since not using large numbers
@@ -71,14 +79,20 @@ enum class CardType : char {
 
 struct Card {
     CardType type{};
-    char suit_index{};
+    Suit suit{};
     char number{};
+
+    auto operator<=>(const Card&) const = default;
 };
 
 using Hand = std::vector<const Card*>;
 
 constexpr int CARDS_PER_SUIT = 13;
 constexpr int FACE_CARDS = 3;
+
+//
+// Helper Functions
+//
 
 constexpr bool hand_has_card_type(const Hand &hand, const CardType card_type, unsigned int card_position = -1){
     if(hand.empty()) return false;
@@ -101,10 +115,10 @@ constexpr int get_hand_score(const Hand &hand){
     for(const Card* const card : hand){
         if(!card) continue;
 
-        if(card->type != CardType::REGULAR){
-            amount += FACE_CARD_VALUE;
-        } else if(card->type == CardType::ACE){
+        if(card->type == CardType::ACE){
             amount += ACE_DEFAULT_VALUE;
+        } else if(card->type != CardType::REGULAR){
+            amount += FACE_CARD_VALUE;
         } else{
             amount += card->number;
         }

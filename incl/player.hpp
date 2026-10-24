@@ -17,28 +17,36 @@ private:
     int insurance_bet = 0;
 
     Options chosen_option = Options::NONE;
-    char m_name[MAX_PLAYER_NAME_LEN + 1]{};
+    char name[MAX_PLAYER_NAME_LEN + 1]{};
 
 public:
-    Player(){
-        std::string name = onboard();
-
-        size_t target_len = std::min(name.size(), size_t(MAX_PLAYER_NAME_LEN));
-        std::copy_n(name.data(), target_len, m_name);
-
-        m_name[MAX_PLAYER_NAME_LEN + 1] = '\0';
+    Player(std::string_view new_name = ""){
+        if(new_name.empty()){
+            set_name(onboard());
+        } else{
+            set_name(new_name);
+        }
     };
     
     // Getters
 
     Hand &get_hand(){ return hand; }
-    std::string get_name() const { return m_name; }
+    
     int get_total_cash() const { return total_cash; }
     int get_current_bet() const { return current_bet; }
     int get_insurance_bet() const { return insurance_bet; }
+
     Options get_chosen_option() const { return chosen_option; }
+    std::string_view get_name() const { return name; }
 
     // Setters
+    
+    void set_name(std::string_view new_name){
+        size_t target_len = std::min(new_name.length(), size_t(MAX_PLAYER_NAME_LEN));
+        std::copy_n(new_name.data(), target_len, name);
+
+        name[target_len] = '\0';
+    }
 
     void set_total_cash(int new_cash){ total_cash = new_cash; }
     void set_current_bet(int new_bet){ current_bet = new_bet; }
