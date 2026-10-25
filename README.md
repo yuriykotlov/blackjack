@@ -1,3 +1,11 @@
+<div align="center">
+
+[![Windows](https://github.com/yuriykotlov/blackjack/actions/workflows/windows-build.yaml/badge.svg?branch=main)](https://github.com/yuriykotlov/blackjack/actions/workflows/windows-build.yaml)
+[![MacOS](https://github.com/yuriykotlov/blackjack/actions/workflows/macos-build.yaml/badge.svg?branch=main)](https://github.com/yuriykotlov/blackjack/actions/workflows/macos-build.yaml)
+[![Linux](https://github.com/yuriykotlov/blackjack/actions/workflows/linux-build.yaml/badge.svg?branch=main)](https://github.com/yuriykotlov/blackjack/actions/workflows/linux-build.yaml)
+
+</div>
+
 # Blackjack in the CLI with C++
 
 This is a singleplayer blackjack game made in C++. It features standard game rules, where you are asked to place a bet, and after being dealt your first two cards,
@@ -53,7 +61,7 @@ HTTPS: git clone https://github.com/yuriykotlov/blackjack.git
 cd blackjack
 
 # Generate blackjack build
-cmake -S . -B build
+cmake -S . -B build -DBUILD_TESTS=OFF
 cmake --build build --target blackjack
 
 # Run the executable

@@ -32,6 +32,10 @@ TEST(DeckTest, HandInit){
 TEST(DeckTest, DeckCards){
     auto &cards_in_deck = deck.get_total_cards();
 
+    // Checks if shuffling works. Test the
+    // front and back cards to be sure, as
+    // there's a chance a card isn't shuffled by chance.
+
     Card &card1 = cards_in_deck.back();
     Card &card3 = cards_in_deck.front();
     
@@ -41,27 +45,18 @@ TEST(DeckTest, DeckCards){
     Card &card2 = cards_in_deck.back();
     Card &card4 = cards_in_deck.front();
 
-    // Check if the card is the same and has been shuffled.
     EXPECT_EQ(card1, card2);
-    
-    // Of course, there is a chance the card has not changed positions by chance,
-    // so test 2 times just to make sure
     EXPECT_EQ(card3, card4);
 
+    // Drawing card tests
     Card *drawn_card = deck.draw();
-
-    // Check if there is one less card in the deck
     EXPECT_EQ(cards_in_deck.size(), cards_in_deck.capacity() - 1);
-    
-    // Check if the only card in drawn_cards is the drawn card
     EXPECT_EQ(deck.get_drawn_cards()[0], *drawn_card);
 
     deck.return_drawn_cards();
     cards_in_deck = deck.get_total_cards();
 
-    // Check if there's no cards in drawn_cards
+    // Returning cards to tests
     EXPECT_TRUE(deck.get_drawn_cards().empty());
-
-    // Check if deck has all its cards back
     EXPECT_EQ(cards_in_deck.size(), cards_in_deck.capacity());
 }
