@@ -4,27 +4,37 @@
 
 #include <iostream>
 
-// build deck
+// Build cards in Deck
 Deck::Deck(){
     int suit_count = static_cast<int>(Suit::COUNT);
 
     total_cards.reserve(CARDS_PER_SUIT * suit_count);
     drawn_cards.reserve(CARDS_PER_SUIT * suit_count);
 
-    int current_suit_index = 0;
+    // The for-loop starts at 2 because the first card number allowed is 2.
+    // `card_number < CARDS_PER_SUIT (13) + 1` is so that static-casting `int card_number`
+    // to CardType will give us the non-regular card types.
 
-    for (auto const &suit : SUIT_STRINGS){
-        for (int i = 0; i <= CARDS_PER_SUIT - 1; ++i){
-            int card_number = i + 2;
+    for (int suit_index = 0; suit_index < static_cast<int>(Suit::COUNT); ++suit_index){
+        for (int card_number = 2; card_number <= CARDS_PER_SUIT + 1; ++card_number){
+            CardType type = card_number <= FACE_CARD_VALUE ? CardType::REGULAR : static_cast<CardType>(card_number);
+
             Card new_card{
-                // will cast to face cards type once above 10, as 13 - 3 = 10
-                i <= (CARDS_PER_SUIT - 1) - FACE_CARDS ? CardType::REGULAR : static_cast<CardType>(card_number),
-                static_cast<Suit>(current_suit_index),
-                static_cast<char>(card_number)
+                type,
+                static_cast<Suit>(suit_index),
+                static_cast<char>(
+                    [type, card_number](){
+                        switch(type){
+                            case CardType::ACE: return ACE_DEFAULT_VALUE;
+                            case CardType::REGULAR: return card_number;
+                            default: return FACE_CARD_VALUE;
+                        }
+                    }()
+                )
             };
+
             total_cards.push_back(new_card);
         }
-        current_suit_index += 1;
     }
 }
 

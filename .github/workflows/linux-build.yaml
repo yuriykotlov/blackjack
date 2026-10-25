@@ -22,11 +22,8 @@ jobs:
       - name: Build main executable and tests
         run: cmake --build build --config Debug
 
-      - name: Create test-results directory
-        run: mkdir -p test-results
-
       - name: Run tests
-        run: ctest --test-dir build -C Debug --output-on-failure --output-junit "${{ matrix.os }}.xml"
+        run: ctest --test-dir build -C Debug --output-on-failure --output-junit linux-report.xml
 
       - name: Test report
         uses: dorny/test-reporter@v1

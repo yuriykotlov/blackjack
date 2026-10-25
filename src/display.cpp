@@ -19,6 +19,7 @@
 
 namespace Display{
 
+// Enable ANSI escape codes (for clearing terminal, setting cursor to X line, etc.) for Windows
 void enable_ansi_codes(){
 #if _WIN32
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -55,6 +56,7 @@ std::string card_to_string(const Card &card){
     return card_string;
 }
 
+// Takes the cards in a hand and converts them into a string to be displayed.
 std::string format_hand(const Hand &hand){
     std::string hand_string{};
 
@@ -72,6 +74,7 @@ std::string_view suit_to_string(Suit suit){
     return SUIT_STRINGS.at(static_cast<int>(suit));
 }
 
+// Display the current hands of the Dealer and Player, and the Player's general stats.
 std::string game_round(Player &player, const Hand &dealer_hand){
     std::string dealer_hand_formatted = format_hand(dealer_hand);
 
@@ -106,6 +109,7 @@ std::string game_round(Player &player, const Hand &dealer_hand){
     );
 }
 
+// Display the end of the round according to the game conditions.
 std::string end_round(Game &game, int player_bet){
     const auto &player_hand = game.get_player().get_hand();
     const auto &dealer_hand = game.get_dealer().get_hand();

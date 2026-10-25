@@ -2,8 +2,14 @@
 
 #include <iostream>
 #include <limits>
+#include <string_view>
 
-bool quit_game(){
+bool quit_game(std::string_view message = ""){
+    if(!message.empty()){
+        std::cout << "\033[2J\033[1;1H";
+        std::cout << message << '\n';
+    } 
+
     char option;
 
     while(true){
@@ -22,15 +28,15 @@ bool quit_game(){
 }
 
 int main(){
-    std::cout << R"(
+    std::string message = R"(
         Welcome to blackjack!
     
     [s] Start game      [q] Exit
-    )" << '\n';
+    )";
 
-    if(quit_game()) return 0;
+    if(quit_game(message)) return 0;
 
-    // start of game
+    // Setup game
     Game game{game.init_game()};
 
     while (true){
@@ -46,16 +52,14 @@ int main(){
             if(quit_game()) break;
 
         } else{
-            std::cout << "\033[2J\033[1;1H";
-
-            std::cout << R"(
+            message = R"(
             Unfortunately, you ran out of cash
                  to play Blackjack with...
             
             [s] Start new game      [q] Exit
-            )" << '\n';
+            )";
             
-            if(quit_game()) break;
+            if(quit_game(message)) break;
         }
     }
 

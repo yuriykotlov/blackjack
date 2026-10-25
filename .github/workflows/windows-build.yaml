@@ -23,7 +23,7 @@ jobs:
         run: cmake --build build --config Debug
 
       - name: Run tests
-        run: ctest --test-dir build -C Debug --output-on-failure --output-junit "${{ matrix.os }}.xml"
+        run: ctest --test-dir build -C Debug --output-on-failure --output-junit windows-report.xml
 
       - name: Test report
         uses: dorny/test-reporter@v1

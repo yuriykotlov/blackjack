@@ -4,16 +4,42 @@
 #include "display.hpp"
 
 #include <iostream>
+#include <vector>
+#include <ranges>
 
 Deck& deck = Deck::get_deck();
 
 TEST(DeckTest, DeckInit){
-    // standard deck size is 52
+    // standard deck size is 52 (subtract 1 since index 0 will count)
     int target_deck_size = CARDS_PER_SUIT * SUIT_STRINGS.size();
     EXPECT_EQ(target_deck_size, 52);
 
-    auto &total_cards = deck.get_total_cards();
+    const auto &total_cards = deck.get_total_cards();
     EXPECT_EQ(total_cards.size(), target_deck_size);
+
+    int regular_cards_target = CARDS_PER_SUIT - FACE_CARDS;
+    int face_cards_target = FACE_CARDS;
+
+    for (int suit_index = 0; suit_index < static_cast<int>(Suit::COUNT); ++suit_index){
+        // Filter cards by suit type to loop through in this iteration
+        auto filter = total_cards | std::views::filter([suit_index](const Card &card){
+            return card.suit == static_cast<Suit>(suit_index);
+        });
+
+        int regular_card_count = 0;
+        int face_card_count = 0;
+
+        for (const auto &card : filter){
+            if(card.type == CardType::REGULAR || card.type == CardType::ACE){
+                ++regular_card_count;
+            } else{
+                ++face_card_count;
+            }
+        }
+
+        EXPECT_EQ(regular_card_count, regular_cards_target);
+        EXPECT_EQ(face_card_count, face_cards_target);
+    }
 }
 
 TEST(DeckTest, HandInit){
@@ -59,4 +85,17 @@ TEST(DeckTest, DeckCards){
     // Returning cards to tests
     EXPECT_TRUE(deck.get_drawn_cards().empty());
     EXPECT_EQ(cards_in_deck.size(), cards_in_deck.capacity());
+}
+
+TEST(DeckTest, CardValues){
+    for(const auto &card : deck.get_total_cards()){
+        int card_num = static_cast<int>(card.number);
+        switch(card.type){
+            case CardType::REGULAR: EXPECT_TRUE(card_num <= FACE_CARD_VALUE); break;
+            case CardType::ACE: EXPECT_EQ(card_num, ACE_DEFAULT_VALUE); break;
+            case CardType::KING: EXPECT_EQ(card_num, FACE_CARD_VALUE); break;
+            case CardType::QUEEN: EXPECT_EQ(card_num, FACE_CARD_VALUE); break;
+            case CardType::JACK: EXPECT_EQ(card_num, FACE_CARD_VALUE); break;
+        }
+    }
 }
